@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  * Created by Caleb on 2/19/2016.
@@ -41,7 +42,8 @@ public class Solver {
             System.out.println(goal);
         }
         Game playMe = new Game(input, goal, debug);
-        // playMe.loop();
+        Stack<Board.BlockDirection> moves = playMe.loop();
+        printMoves(moves);
     }
 
     private static List<String> readFile(String filename) throws FileNotFoundException {
@@ -52,5 +54,17 @@ public class Solver {
             }
         }
         return inputList;
+    }
+
+    // use the call stack to reverse the move stack to print the moves in order
+    public static void printMoves(Stack<Board.BlockDirection> moves) {
+        Board.BlockDirection move = moves.pop();
+        if(!moves.isEmpty()) {
+            printMoves(moves);
+        }
+        System.out.print(move.getBlock().getY() + " ");
+        System.out.print(move.getBlock().getX() + " ");
+        System.out.print(move.getBlock().getY() + move.getDirection().getY() + " ");
+        System.out.println(move.getBlock().getX() + move.getDirection().getX());
     }
 }

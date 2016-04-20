@@ -12,3 +12,5 @@ depth first goes as far as it can on one (random) hunch until it reaches a dead 
 USING:
 depth first
 storing blocks
+
+I think my hashcode has too many collisions

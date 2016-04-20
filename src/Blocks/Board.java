@@ -1,6 +1,8 @@
 package Blocks;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.List;
 
 /**
  * Created by Caleb on 2/19/2016.
@@ -25,12 +27,14 @@ public class Board {
 
     private Set<Block> state;
     private int h, w;
+    private Set<Integer> prevStates;
 
     public Board (List<String> input) {
         String[] dims = input.get(0).split(" ");
         this.h = Integer.parseInt(dims[0]);
         this.w = Integer.parseInt(dims[1]);
         this.state = new HashSet<>();
+        this.prevStates = new HashSet<>();
 
         // Parses List of Strings into 2D Array
         for(int i = 0; i < input.size() - 1; i++) {
@@ -41,26 +45,26 @@ public class Board {
             }
             state.add(new Block(block));
         }
+        prevStates.add(this.hashCode());
     }
 
-//    public void move(int[] mv) {
-//        System.out.println(mv);
-//    }
-
     // all possible moves, not necessarily legal
-    public List<int[]> possibleMove() {
-        List<int[]> moves = new ArrayList<>();
+    // @return a Block and a Direction
+    public BlockDirection move() {
         for (Block b : state) {
             for(Direction d : Direction.values()) {
                 b.move(d);
-                if(isOK(b)) {
-                    // return this move to find first legal move
-                    moves.add(new int[]{b.getY(), b.getX(), b.getY() + d.getY(), b.getX() + d.getX()});
+                if(prevStates.contains(this.hashCode())){
+                    System.out.println("Previous state encountered");
+                }
+                if(isOK(b) && !prevStates.contains(this.hashCode())) {
+                    prevStates.add(this.hashCode());
+                    return new BlockDirection(b, d);
                 }
                 b.unmove(d);
             }
         }
-        return moves;
+        return null;
     }
 
     // Checks whether a board state would be valid
@@ -106,6 +110,10 @@ public class Board {
         return state.contains(b);
     }
 
+    public Set<Integer> getPrevStates() {
+        return prevStates;
+    }
+
     public boolean equals(Object o) {
         if(o == null || !(o instanceof Board)) {
             return false;
@@ -121,5 +129,23 @@ public class Board {
 
     public String toString() {
         return state.toString().replace("],", "]\n");
+    }
+
+    public class BlockDirection {
+        private Block block;
+        private Direction direction;
+
+        public BlockDirection(Block b, Direction d) {
+            this.block = b;
+            this.direction = d;
+        }
+
+        public Block getBlock() {
+            return block;
+        }
+
+        public Direction getDirection() {
+            return direction;
+        }
     }
 }
