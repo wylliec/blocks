@@ -11,24 +11,46 @@ import java.util.Scanner;
  */
 public class Solver {
     public static void main(String[] args) throws FileNotFoundException {
+        if (args.length > 3 || args.length < 2 ) {
+            System.out.println("Wrong number of arguments.");
+            System.out.println("Usage: java Solver [-o[options|debug]] init-file goal-file");
+            System.exit(1);
+        }
         int pos = 0;
+
+        // Seperates out option arguments
+        String option = "";
+        boolean debug = false;
         if(pos < args.length && args[pos].startsWith("-o")) {
-            System.out.println(args[pos].substring(2)); // -ooptions
+            option = args[pos].substring(2);
+            if(option.contains("debug")) {
+                debug = true;
+                System.out.println("option: " + option); // -ooptions, -odebug
+            }
+            if(option.contains("options")) {
+                System.out.println("Usage: java Solver [-o[options|debug]] init-file goal-file");
+            }
             pos++;
         }
-        Scanner input = new Scanner(new File(args[pos]));
+
+        // Reads in files into Lists of strings
+        List<String> input = readFile(args[pos]);
+        List<String> goal = readFile(args[pos + 1]);
+        if(debug) {
+            System.out.println(input);
+            System.out.println(goal);
+        }
+        Game playMe = new Game(input, goal, debug);
+        // playMe.loop();
+    }
+
+    private static List<String> readFile(String filename) throws FileNotFoundException {
         List<String> inputList = new ArrayList<>();
-        Scanner goal = new Scanner(new File(args[pos + 1]));
-        List<String> goalList = new ArrayList<>();
-        while(input.hasNextLine()) {
-            inputList.add(input.nextLine());
+        try(Scanner in = new Scanner(new File(filename))) {
+            while (in.hasNextLine()) {
+                inputList.add(in.nextLine());
+            }
         }
-        while(goal.hasNextLine()) {
-            goalList.add(goal.nextLine());
-        }
-        Board tray = new Board(inputList);
-        Game playMe = new Game(tray, goalList);
-        System.out.println(tray);
-        playMe.loop();
+        return inputList;
     }
 }

@@ -23,3 +23,6 @@ out/
 
 # Mac
 .DS_Store
+
+!Checker.class
+!TrayVerifier.class

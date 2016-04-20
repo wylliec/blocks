@@ -1,0 +1,14 @@
+iterative should be objectively better than recursion
+
+searching by empty space optimizes for dense board layouts
+searching by blocks optimizes for sparse layouts
+
+storing as blocks optimizes for search by block
+storing as a 2D board optimizes for empty space search
+
+breadth first looks as many possible ways the blocks can move to in the next step
+depth first goes as far as it can on one (random) hunch until it reaches a dead end
+
+USING:
+depth first
+storing blocks

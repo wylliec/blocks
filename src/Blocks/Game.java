@@ -1,25 +1,40 @@
 package Blocks;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Caleb on 2/19/2016.
  */
 public class Game {
     private Board board;
-    private int[][] goal;
+    private Set<Block> goal;
+    private boolean debug;
+    private Stack<int[]> moves;
+    private Set<Integer> hashes;
 
-    public Game(Board gameBoard, List<String> goalInput) {
-        this.board = gameBoard;
-        this.goal = new int[goalInput.size()][4];
+    public Game(List<String> inputList, List<String> goalList) {
+        this(inputList, goalList, false);
+    }
 
-        for(int i = 0; i < goalInput.size(); i++) {
-            String[] goalBlocks = goalInput.get(i).split(" ");
-            for (int j = 0; j < this.goal[0].length; j++) {
-                this.goal[i][j] = Integer.parseInt(goalBlocks[j]);
+    public Game(List<String> inputList, List<String> goalList, boolean debug) {
+        this.debug = debug;
+        this.board = new Board(inputList);
+        this.goal = new HashSet<>();
+        this.moves = new Stack<>();
+
+        // Parses List of Strings into 2D Array
+        for(String i : goalList) {
+            String[] goalBlocks = i.split(" ");
+            int[] block = new int[Block.N];
+            for (int j = 0; j < Block.N; j++) {
+                block[j] = Integer.parseInt(goalBlocks[j]);
             }
+            goal.add(new Block(block));
+        }
 
+        if (this.debug) {
+            System.out.println("Board: \n" + this.board.toString());
+            System.out.println("Goal: \n" + this.goal.toString().replace("],", "]\n"));
         }
     }
 
@@ -30,15 +45,13 @@ public class Game {
 //            Store all the children of N in Container
 //            Do some work on N
         while(!hasGoal()) {
-            for (Board.Direction d : Board.Direction.values()) {
-                board.move(1, d);
-            }
+
         }
     }
 
     public boolean hasGoal() {
-        for(int[] block : goal) {
-            if(!board.hasBlock(block[0], block[1], block[2], block[3])) {
+        for(Block block : goal) {
+            if(!board.hasBlock(block)) {
                 return false;
             }
         }

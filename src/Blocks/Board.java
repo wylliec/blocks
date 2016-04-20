@@ -1,13 +1,12 @@
 package Blocks;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Caleb on 2/19/2016.
  */
 public class Board {
+
     public enum Direction {
         UP (-1, 0),
         DOWN (1, 0),
@@ -20,79 +19,91 @@ public class Board {
             this.y = y;
             this.x = x;
         }
+        public int getX(){ return x; }
+        public int getY(){ return y; }
     }
 
-    private int[][] state;
+    private Set<Block> state;
+    private int h, w;
 
     public Board (List<String> input) {
         String[] dims = input.get(0).split(" ");
-        this.state = new int[Integer.parseInt(dims[0])][Integer.parseInt(dims[1])];
-        int id = 1;
-        for(int index = 1; index < input.size(); index++) {
-            String[] line = input.get(index).split(" ");
-            for(int i = 0; i < Integer.parseInt(line[0]); i++) {
-                for(int j = 0; j < Integer.parseInt(line[1]); j++) {
-                    this.state[Integer.parseInt(line[2]) + i][Integer.parseInt(line[3]) + j] =
-                            id * 100 + Integer.parseInt(line[0]) * 10 + Integer.parseInt(line[1]);
-                }
+        this.h = Integer.parseInt(dims[0]);
+        this.w = Integer.parseInt(dims[1]);
+        this.state = new HashSet<>();
+
+        // Parses List of Strings into 2D Array
+        for(int i = 0; i < input.size() - 1; i++) {
+            String[] inputBlocks = input.get(i + 1).split(" ");
+            int[] block = new int[Block.N];
+            for (int j = 0; j < Block.N; j++) {
+                block[j] = Integer.parseInt(inputBlocks[j]);
             }
-            id++;
+            state.add(new Block(block));
         }
     }
 
-    public void move(int block, Direction dir) {
-        System.out.println(dir.x);
-//        switch(dir) {
-//            case UP:
-//                break;
-//            case DOWN:
-//                break;
-//            case LEFT:
-//                break;
-//            case RIGHT:
-//                break;
-//            default:
-//                break;
-//        }
-    }
+//    public void move(int[] mv) {
+//        System.out.println(mv);
+//    }
 
-    public List<int[]> possibleMoves() {
+    // all possible moves, not necessarily legal
+    public List<int[]> possibleMove() {
         List<int[]> moves = new ArrayList<>();
-        for(int[] space : emptySpaces()) {
+        for (Block b : state) {
             for(Direction d : Direction.values()) {
-
-            }
-        }
-        return moves;
-    }
-
-    public List<int[]> emptySpaces() {
-        List<int[]> moves = new ArrayList<>();
-        for(int y = 0; y < state.length; y++) {
-            for (int x = 0; x < state[0].length; x++) {
-                if(state[y][x] == 0) {
-                    moves.add(new int[]{y, x});
+                b.move(d);
+                if(isOK(b)) {
+                    // return this move to find first legal move
+                    moves.add(new int[]{b.getY(), b.getX(), b.getY() + d.getY(), b.getX() + d.getX()});
                 }
+                b.unmove(d);
             }
         }
         return moves;
     }
 
-    // Returns whether the board contains the block at (y,x) h units long and w units wide
-    public boolean hasBlock(int h, int w, int y, int x) {
-        // use blocks unique id to make sure its all the same block
-        int id = 0;
-        for(int i = 0; i < h; i++) {
-            for(int j = 0; j < w; j++) {
-                if( !(id == 0 || id == state[i + y][j + x] / 100) ||
-                        h * 10 + w != state[i + y][j + x] % 100) {
+    // Checks whether a board state would be valid
+    public boolean isOK() {
+        for (Block b: state) {
+            isOK(b);
+        }
+        return true;
+    }
+
+    // checks whether a certain block is legal
+    public boolean isOK(Block b) {
+        // checks whether block is in bounds
+        if(b.getX() < 0 || b.getY() < 0 ||
+                b.getY() + b.getH() > h || b.getX() + b.getW() > w) {
+            return false;
+        }
+        // checks whether blocks don't overlap
+        for(Block b2 : state) {
+            if (b != b2) { // of course a block overlaps with itself...
+                if(((b.getY() <= b2.getY() && b.getY() + b.getH() > b2.getY()) || // overlaps y
+                        (b2.getY() <= b.getY() && b2.getY() + b2.getH() > b.getY())) &&
+                        ((b.getX() <= b2.getX() && b.getX() + b.getW() > b2.getX()) || // overlaps x
+                        (b2.getX() <= b.getX() && b2.getX() + b2.getW() > b.getX()))) {
                     return false;
-                } else {
-                    id = state[i + y][j + x] / 100;
                 }
             }
         }
         return true;
+    }
+
+    public Block findBlock(int x, int y) {
+        for (Block b : state) {
+            if(b.getY() == y && b.getX() == x) {
+                return b;
+            }
+        }
+        return null;
+    }
+
+    // Returns whether the board contains the block at (y,x) h units long and w units wide
+    public boolean hasBlock(Block b) {
+        return state.contains(b);
     }
 
     public boolean equals(Object o) {
@@ -100,23 +111,15 @@ public class Board {
             return false;
         }
         Board other = (Board)o;
-        return super.equals(o);
+        return this.state.equals(other.state);
     }
 
     public int hashCode() {
         // HashCodeBuilder
-        return super.hashCode();
+        return state.hashCode();
     }
 
     public String toString() {
-        String toReturn = "";
-        for(int i = 0; i < state.length; i ++) {
-            for (int j = 0; j < state[0].length; j++) {
-                toReturn += String.format("%2d ", state[i][j] / 100);
-                // toReturn += (char)((state[i][j] / 100) + 'A' - 1) + " ";
-            }
-            toReturn = toReturn.trim() + "\n";
-        }
-        return toReturn;
+        return state.toString().replace("],", "]\n");
     }
 }
