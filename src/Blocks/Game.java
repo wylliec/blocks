@@ -1,9 +1,6 @@
 package Blocks;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by Caleb on 2/19/2016.
@@ -12,7 +9,7 @@ public class Game {
     private Board board;
     private Set<Block> goal;
     private boolean debug;
-    private Stack<Board.BlockDirection> moves;
+    private Deque<Board.BlockDirection> moves;
 
     public Game(List<String> inputList, List<String> goalList) {
         this(inputList, goalList, false);
@@ -22,11 +19,12 @@ public class Game {
         this.debug = debug;
         this.board = new Board(inputList);
         this.goal = new HashSet<>();
-        this.moves = new Stack<>();
+        this.moves = new ArrayDeque<>();
 
         // Parses List of Strings into 2D Array
         for(String i : goalList) {
             String[] goalBlocks = i.split(" ");
+            System.out.println("len " + goalBlocks.length);
             int[] block = new int[Block.N];
             for (int j = 0; j < Block.N; j++) {
                 block[j] = Integer.parseInt(goalBlocks[j]);
@@ -37,10 +35,11 @@ public class Game {
         if (this.debug) {
             System.out.println("Board: \n" + this.board.toString());
             System.out.println("Goal: \n" + this.goal.toString().replace("],", "]\n"));
+            System.out.println("Has goal? : " + hasGoal());
         }
     }
 
-    public Stack<Board.BlockDirection> loop(){
+    public Deque<Board.BlockDirection> loop(){
         if(debug) {
             System.out.println("Playing!");
         }
@@ -82,6 +81,9 @@ public class Game {
     public boolean hasGoal() {
         for(Block block : goal) {
             if(!board.hasBlock(block)) {
+//                if (debug) {
+//                    System.out.println("Missing block: " + block);
+//                }
                 return false;
             }
         }

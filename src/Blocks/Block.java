@@ -48,7 +48,10 @@ public class Block {
     }
 
     public boolean equals(Object o) {
-        if(o == null || !(o instanceof Board)) {
+        if(this == o) {
+            return true;
+        }
+        if(o == null || !(o instanceof Block)) {
             return false;
         }
         Block other = (Block)o;
@@ -69,7 +72,16 @@ public class Block {
         for (int i = 0; i < this.block.length; i++) {
             sum += (int)Math.pow(256, i) * (block[i] % 256);
         }
+        System.out.println("hash: " + sum);
         return sum;
+//        int hash = block[0];
+//        hash *= 37;
+//        hash += block[1];
+//        hash *= 37;
+//        hash += block[2];
+//        hash *= 37;
+//        hash += block[3];
+//        return hash;
     }
 
     public String toString(){

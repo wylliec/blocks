@@ -2,10 +2,7 @@ package Blocks;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by Caleb on 2/19/2016.
@@ -42,7 +39,7 @@ public class Solver {
             System.out.println(goal);
         }
         Game playMe = new Game(input, goal, debug);
-        Stack<Board.BlockDirection> moves = playMe.loop();
+        Deque<Board.BlockDirection> moves = playMe.loop();
         printMoves(moves);
     }
 
@@ -57,14 +54,13 @@ public class Solver {
     }
 
     // use the call stack to reverse the move stack to print the moves in order
-    public static void printMoves(Stack<Board.BlockDirection> moves) {
-        Board.BlockDirection move = moves.pop();
-        if(!moves.isEmpty()) {
-            printMoves(moves);
+    public static void printMoves(Deque<Board.BlockDirection> moves) {
+        while(!moves.isEmpty()) {
+            Board.BlockDirection move = moves.removeLast();
+            System.out.print(move.getBlock().getY() + " ");
+            System.out.print(move.getBlock().getX() + " ");
+            System.out.print(move.getBlock().getY() + move.getDirection().getY() + " ");
+            System.out.println(move.getBlock().getX() + move.getDirection().getX());
         }
-        System.out.print(move.getBlock().getY() + " ");
-        System.out.print(move.getBlock().getX() + " ");
-        System.out.print(move.getBlock().getY() + move.getDirection().getY() + " ");
-        System.out.println(move.getBlock().getX() + move.getDirection().getX());
     }
 }

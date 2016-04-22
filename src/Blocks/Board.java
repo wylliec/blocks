@@ -1,8 +1,6 @@
 package Blocks;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Caleb on 2/19/2016.
@@ -124,7 +122,12 @@ public class Board {
 
     public int hashCode() {
         // HashCodeBuilder
-        return state.hashCode();
+//        return state.hashCode();
+        int hash = 1;
+        for(Block b : state) {
+            hash *= b.hashCode();
+        }
+        return hash;
     }
 
     public String toString() {
