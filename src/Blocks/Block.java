@@ -68,12 +68,13 @@ public class Block {
 
     public int hashCode() {
         // HashCodeBuilder
-        int sum = 0;
-        for (int i = 0; i < this.block.length; i++) {
-            sum += (int)Math.pow(256, i) * (block[i] % 256);
-        }
-        System.out.println("hash: " + sum);
-        return sum;
+//        int sum = 0;
+//        for (int i = 0; i < this.block.length; i++) {
+//            sum += (int)Math.pow(256, i) * (block[i] % 256);
+//        }
+//        //System.out.println("hash: " + sum);
+//        return sum;
+
 //        int hash = block[0];
 //        hash *= 37;
 //        hash += block[1];
@@ -82,7 +83,26 @@ public class Block {
 //        hash *= 37;
 //        hash += block[3];
 //        return hash;
+
+        int sum = 0;
+        for (int i = 0; i < this.block.length; i++) {
+            sum = (sum << 8) + (block[i] % 256);
+        }
+        return sum;
     }
+
+
+//    public long hashCodeLong() {
+//        int sum = 0;
+//        for (int i = 0; i < this.block.length; i++) {
+//            sum = (sum << 8) + (block[i] % 256);
+//        }
+//        return sum;
+//    }
+
+//    public int[] getArray() {
+//        return new int[]{block[0], block[1], block[2], block[3]};
+//    }
 
     public String toString(){
         return Arrays.toString(block);

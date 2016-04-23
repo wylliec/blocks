@@ -8,6 +8,8 @@ import java.util.*;
  * Created by Caleb on 2/19/2016.
  */
 public class Solver {
+    private static boolean debug = false;
+
     public static void main(String[] args) throws FileNotFoundException {
         if (args.length > 3 || args.length < 2 ) {
             System.out.println("Wrong number of arguments.");
@@ -17,12 +19,10 @@ public class Solver {
         int pos = 0;
 
         // Seperates out option arguments
-        String option = "";
-        boolean debug = false;
         if(pos < args.length && args[pos].startsWith("-o")) {
-            option = args[pos].substring(2);
+            String option = args[pos].substring(2);
             if(option.contains("debug")) {
-                debug = true;
+                Solver.debug = true;
                 System.out.println("option: " + option); // -ooptions, -odebug
             }
             if(option.contains("options")) {
@@ -34,11 +34,11 @@ public class Solver {
         // Reads in files into Lists of strings
         List<String> input = readFile(args[pos]);
         List<String> goal = readFile(args[pos + 1]);
-        if(debug) {
+        if(isDebug()) {
             System.out.println(input);
             System.out.println(goal);
         }
-        Game playMe = new Game(input, goal, debug);
+        Game playMe = new Game(input, goal);
         Deque<Board.BlockDirection> moves = playMe.loop();
         printMoves(moves);
     }
@@ -62,5 +62,9 @@ public class Solver {
             System.out.print(move.getBlock().getY() + move.getDirection().getY() + " ");
             System.out.println(move.getBlock().getX() + move.getDirection().getX());
         }
+    }
+
+    public static boolean isDebug() {
+        return Solver.debug;
     }
 }
