@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 public class Board {
 
     public enum Direction {
-        UP (-1, 0),
         DOWN (1, 0),
         LEFT (0, -1),
-        RIGHT (0, 1);
+        RIGHT (0, 1),
+        UP (-1, 0);
 
         private final int y;
         private final int x;
@@ -24,16 +24,20 @@ public class Board {
         public int getY(){ return y; }
     }
 
+
     private Set<Block> state;
     private int h, w;
-    private Set<Set<Integer>> prevStates;
+
+    private Board prevState;
+    private String move;
 
     public Board (List<String> input) {
         String[] dims = input.get(0).split(" ");
         this.h = Integer.parseInt(dims[0]);
         this.w = Integer.parseInt(dims[1]);
         this.state = new HashSet<>();
-        this.prevStates = new HashSet<>();
+        this.prevState = null;
+        this.move = null;
 
         // Parses List of Strings into 2D Array
         for(int i = 0; i < input.size() - 1; i++) {
@@ -44,28 +48,44 @@ public class Board {
             }
             state.add(new Block(block));
         }
-        prevStates.add(this.hashCodeSet());
+        //prevStates.add(this.hashCodeSet());
+    }
+
+    private Board(int h, int w, Set<Block> currState, Board prevState, String move) {
+        this.h = h;
+        this.w = w;
+        this.state = new HashSet<>();
+        this.prevState = prevState;
+        this.move = move;
+        for(Block b : currState) {
+            this.state.add((b.deepCopy()));
+        }
+
     }
 
     // all possible moves, not necessarily legal
     // @return a Block and a Direction
-    public BlockDirection move() {
+    public Set<Board> newMoves() {
+        Set<Board> newBoards = new HashSet<>();
         for (Block b : state) {
             for(Direction d : Direction.values()) {
+                String blockPos = b.getY() + " " + b.getX();
                 b.move(d);
-                if(Solver.isDebug()) {
-                    if (prevStates.contains(this.hashCodeSet())) {
-                        System.out.println("Previous state encountered");
-                    }
-                }
-                if(isOK(b) && !prevStates.contains(this.hashCodeSet())) {
-                    prevStates.add(this.hashCodeSet());
-                    return new BlockDirection(b, d);
+                if(isOK(b)) { // && !prevStates.contains(this.hashCodeSet())
+                    newBoards.add(this.deepCopy(blockPos + " " + b.getY() + " " + b.getX()));
                 }
                 b.unmove(d);
             }
         }
-        return null;
+        return newBoards;
+    }
+
+    private Board deepCopy(String newMove) {
+        return new Board(h, w, state, this, newMove);
+    }
+
+    private Board deepCopy() {
+        return new Board(h, w, state, this, "");
     }
 
     // Checks whether a board state would be valid
@@ -104,11 +124,18 @@ public class Board {
         return state.contains(b);
     }
 
-    public Set<Set<Integer>> getPrevStates() {
-        return prevStates;
+    public String getMove() {
+        return move;
+    }
+
+    public Board getPrev() {
+        return prevState;
     }
 
     public boolean equals(Object o) {
+        if(this == o) {
+            return true;
+        }
         if(o == null || !(o instanceof Board)) {
             return false;
         }
@@ -117,18 +144,11 @@ public class Board {
     }
 
     public int hashCode() {
-        // HashCodeBuilder
         return state.hashCode();
-//        int hash = 1;
-//        for(Block b : state) {
-//            hash *= b.hashCode();
-//        }
-//        return hash;
     }
 
     public Set<Integer> hashCodeSet() {
-        Set<Integer> hashes = state.stream().map(Block::hashCode).collect(Collectors.toSet());
-        return hashes;
+        return state.stream().map(Block::hashCode).collect(Collectors.toSet());
     }
 
     public String toString() {

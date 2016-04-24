@@ -39,8 +39,8 @@ public class Solver {
             System.out.println(goal);
         }
         Game playMe = new Game(input, goal);
-        Deque<Board.BlockDirection> moves = playMe.loop();
-        printMoves(moves);
+        Board win = playMe.loop();
+        printMoves(win);
     }
 
     private static List<String> readFile(String filename) throws FileNotFoundException {
@@ -54,13 +54,21 @@ public class Solver {
     }
 
     // use the call stack to reverse the move stack to print the moves in order
-    public static void printMoves(Deque<Board.BlockDirection> moves) {
+    public static void printMoves(Board win) {
+//        while(!moves.isEmpty()) {
+//            Board.BlockDirection move = moves.removeLast();
+//            System.out.print(move.getBlock().getY() + " ");
+//            System.out.print(move.getBlock().getX() + " ");
+//            System.out.print(move.getBlock().getY() + move.getDirection().getY() + " ");
+//            System.out.println(move.getBlock().getX() + move.getDirection().getX());
+//        }
+        Deque<String> moves = new ArrayDeque<>();
+        while(win.getPrev() != null) {
+            moves.push(win.getMove());
+            win = win.getPrev();
+        }
         while(!moves.isEmpty()) {
-            Board.BlockDirection move = moves.removeLast();
-            System.out.print(move.getBlock().getY() + " ");
-            System.out.print(move.getBlock().getX() + " ");
-            System.out.print(move.getBlock().getY() + move.getDirection().getY() + " ");
-            System.out.println(move.getBlock().getX() + move.getDirection().getX());
+            System.out.println(moves.pop());
         }
     }
 

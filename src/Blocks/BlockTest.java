@@ -16,6 +16,10 @@ public class BlockTest {
         assertEquals(b, new Block(1, 2, 4, 4));
         b.move(Board.Direction.LEFT);
         assertEquals(b, new Block(1, 2, 4, 3));
+        b.move(Board.Direction.UP);
+        assertEquals(b, new Block(1, 2, 3, 3));
+        b.move(Board.Direction.RIGHT);
+        assertEquals(b, new Block(1, 2, 3, 4));
     }
 
     @Test
@@ -70,28 +74,7 @@ public class BlockTest {
         Block b2 = new Block(new int[]{255,255,255,255});
         assertEquals(-1, b2.hashCode());
         Block b3 = new Block(new int[]{256,256,256,256});
-        assertEquals(0, b3.hashCode());
-//        assertEquals(52060, b.hashCode());
-//        assertEquals(123 * 256, 123 << 8);
-//        System.out.println(Integer.toBinaryString(123));
-//        int x = (((((1 << 8) + 255) << 8) + 255) << 8) + 255;
-//        System.out.println(x);
-//        System.out.println(Integer.toBinaryString(x));
-//        System.out.println(Integer.toBinaryString(x).length());
-//        x = 1;
-//        for (int i = 0; i < 33; i++) {
-//            x <<= 1;
-//            System.out.println(Integer.toBinaryString(x));
-//            System.out.println(Integer.toBinaryString(x).length());
-//        }
-//        System.out.println(Integer.toBinaryString(255*256*256*256));
     }
-
-//    @Test
-//    public void hashCodeLong() throws Exception {
-//        Block b = new Block(new int[]{1, 1, 1, 1});
-//        assertEquals(16843009, b.hashCodeLong());
-//    }
 
     @Test
     public void toStringTest() throws Exception {
