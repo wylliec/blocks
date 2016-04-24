@@ -53,15 +53,8 @@ public class Solver {
         return inputList;
     }
 
-    // use the call stack to reverse the move stack to print the moves in order
+    // use a deque to reverse the move stack to print the moves in order
     public static void printMoves(Board win) {
-//        while(!moves.isEmpty()) {
-//            Board.BlockDirection move = moves.removeLast();
-//            System.out.print(move.getBlock().getY() + " ");
-//            System.out.print(move.getBlock().getX() + " ");
-//            System.out.print(move.getBlock().getY() + move.getDirection().getY() + " ");
-//            System.out.println(move.getBlock().getX() + move.getDirection().getX());
-//        }
         Deque<String> moves = new ArrayDeque<>();
         while(win.getPrev() != null) {
             moves.push(win.getMove());

@@ -6,14 +6,12 @@ import java.util.*;
  * Created by Caleb on 2/19/2016.
  */
 public class Game {
-    //private Board board;
     private Set<Block> goal;
     private Set<Board> prevStates;
     private Queue<Board> statesToTry;
 
 
     public Game(List<String> inputList, List<String> goalList) {
-        //this.board = new Board(inputList);
         this.goal = new HashSet<>();
         this.prevStates = new HashSet<>();
         this.statesToTry = new LinkedList<>();
@@ -37,12 +35,13 @@ public class Game {
         }
     }
 
-    public Board loop(){
+//      BFS
 //        Store the root node in queue
 //        While (there are nodes in queue)
 //            N = Get the "next" node from queue
 //            Store all the children of N in queue
 //            Do some work on N
+    public Board loop(){
 
         if(Solver.isDebug()) {
             System.out.println("Playing!");
@@ -50,54 +49,21 @@ public class Game {
 
         while(!statesToTry.isEmpty()) {
             Board tray = statesToTry.remove();
-            statesToTry.addAll(tray.newMoves());
-            if (hasGoal(tray)) {
-                return tray;
+            if(!prevStates.contains(tray)) {
+                prevStates.add(tray);
+                statesToTry.addAll(tray.newMoves());
+                if (hasGoal(tray)) {
+                    return tray;
+                }
             }
         }
+        System.exit(1);
         return null;
-
-//        while(!hasGoal()) {
-//            if(Solver.isDebug()) {
-//                System.out.println(board.toVisualString());
-//            }
-//            Board.BlockDirection mv = board.move();
-//            if(mv == null) {
-//                if (moves.isEmpty()) {
-//                    // at start position and no possible moves
-//                    if(Solver.isDebug()) {
-//                        System.out.println("Cannot continue");
-//                        System.out.println(board.getPrevStates().size());
-//                    }
-//                    System.exit(1);
-//                } else {
-//                    if(Solver.isDebug()) {
-//                        System.out.println("Undoing a move");
-//                    }
-//                    mv = moves.pop();
-//                    // undo last move
-//                    mv.getBlock().unmove(mv.getDirection());
-//                }
-//            } else {
-//                if(Solver.isDebug()) {
-//                    System.out.println("Making a move");
-//                }
-//                moves.push(mv);
-//            }
-//        }
-//        // print out moves to get to winning position
-//        if(Solver.isDebug()) {
-//            System.out.println("You win!");
-//        }
-//        return moves;
     }
 
     public boolean hasGoal(Board board) {
         for(Block block : goal) {
             if(!board.hasBlock(block)) {
-//                if (Solver.isDebug()) {
-//                    System.out.println("Missing block: " + block);
-//                }
                 return false;
             }
         }

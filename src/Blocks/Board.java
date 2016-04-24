@@ -1,7 +1,6 @@
 package Blocks;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by Caleb on 2/19/2016.
@@ -48,7 +47,6 @@ public class Board {
             }
             state.add(new Block(block));
         }
-        //prevStates.add(this.hashCodeSet());
     }
 
     private Board(int h, int w, Set<Block> currState, Board prevState, String move) {
@@ -64,14 +62,13 @@ public class Board {
     }
 
     // all possible moves, not necessarily legal
-    // @return a Block and a Direction
     public Set<Board> newMoves() {
         Set<Board> newBoards = new HashSet<>();
         for (Block b : state) {
             for(Direction d : Direction.values()) {
                 String blockPos = b.getY() + " " + b.getX();
                 b.move(d);
-                if(isOK(b)) { // && !prevStates.contains(this.hashCodeSet())
+                if(isOK(b)) {
                     newBoards.add(this.deepCopy(blockPos + " " + b.getY() + " " + b.getX()));
                 }
                 b.unmove(d);
@@ -82,10 +79,6 @@ public class Board {
 
     private Board deepCopy(String newMove) {
         return new Board(h, w, state, this, newMove);
-    }
-
-    private Board deepCopy() {
-        return new Board(h, w, state, this, "");
     }
 
     // Checks whether a board state would be valid
@@ -147,10 +140,6 @@ public class Board {
         return state.hashCode();
     }
 
-    public Set<Integer> hashCodeSet() {
-        return state.stream().map(Block::hashCode).collect(Collectors.toSet());
-    }
-
     public String toString() {
         return state.toString().replace("],", "]\n");
     }
@@ -166,7 +155,6 @@ public class Board {
             }
             id++;
         }
-        //return Arrays.deepToString(tray).replace("],", "]\n");
         String toReturn = "";
         for(int i = 0; i < tray.length; i ++) {
             for (int j = 0; j < tray[0].length; j++) {
@@ -176,23 +164,5 @@ public class Board {
             toReturn = toReturn.replace('@', '.') + "\n";
         }
         return toReturn;
-    }
-
-    public class BlockDirection {
-        private Block block;
-        private Direction direction;
-
-        public BlockDirection(Block b, Direction d) {
-            this.block = b;
-            this.direction = d;
-        }
-
-        public Block getBlock() {
-            return block;
-        }
-
-        public Direction getDirection() {
-            return direction;
-        }
     }
 }
