@@ -1,0 +1,110 @@
+hive5 [178] ~/src # ./run.hard
+====================================================================
+=== century (100 moves) and century 1.5 (150 moves)
+--- test 1
+handout.config.2   goal.1.from.handout
+Verified
+
+--- test 2
+century+180   century+180.goal
+Verified
+
+--- test 3
+handout.config.2   century.1.5.goal
+Verified
+
+--- test 4
+century+180   century.1.5+180.goal
+Verified
+
+=== tests with lots of blocks or space
+--- test 5
+big.tray.4   many.blocks.20.goal
+CPU time limit exceeded (core dumped)
+*** incorrect status
+Block movement error: Final configuration doesn't match goal.
+*** incorrect solver output
+
+--- test 6
+big.tray.4   many.blocks.20+180.goal
+CPU time limit exceeded (core dumped)
+*** incorrect status
+Block movement error: Final configuration doesn't match goal.
+*** incorrect solver output
+
+--- test 7
+big.tray.4   many.blocks.100.goal
+CPU time limit exceeded (core dumped)
+*** incorrect status
+Block movement error: Final configuration doesn't match goal.
+*** incorrect solver output
+
+--- test 8
+big.tray.1   big.tray.1.goal
+Verified
+
+--- test 9
+big.tray.3   big.tray.3.goal
+Verified
+
+=== more tests
+--- test 10 (77? moves)
+c22   22.goal
+Verified
+
+--- test 11 (40 moves)
+c25   15.23-27.30.41.goal
+Verified
+
+--- test 12 (49 moves)
+c26   15.23-27.30.41.goal
+Verified
+
+--- test 13 (113 moves)
+c43-45   45.goal
+Verified
+
+--- test 14 (71? moves)
+c46   46.goal
+Verified
+
+=== tests with 6x5 boards
+--- test 15 (55 moves, 6x5)
+c53   53.54.64.goal
+CPU time limit exceeded (core dumped)
+*** incorrect status
+Block movement error: Final configuration doesn't match goal.
+*** incorrect solver output
+
+--- test 16 (44 moves, 6x5)
+c54   53.54.64.goal
+Verified
+
+--- test 17 (48 moves, 6x5)
+c55   55.56.goal
+CPU time limit exceeded (core dumped)
+*** incorrect status
+Block movement error: Final configuration doesn't match goal.
+*** incorrect solver output
+
+--- test 18 (47 moves, 6x5)
+c64   53.54.64.goal
+CPU time limit exceeded (core dumped)
+*** incorrect status
+Block movement error: Final configuration doesn't match goal.
+*** incorrect solver output
+
+=== tests with 6x6 boards
+--- test 19 (103 moves, 6x6)
+c71   71.goal
+CPU time limit exceeded (core dumped)
+*** incorrect status
+Block movement error: Final configuration doesn't match goal.
+*** incorrect solver output
+
+--- test 20 (needs 103 moves)
+pandemonium   pandemonium.goal
+CPU time limit exceeded (core dumped)
+*** incorrect status
+Block movement error: Final configuration doesn't match goal.
+*** incorrect solver output

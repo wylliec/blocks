@@ -1,0 +1,192 @@
+hive5 [186] ~/src # ./run.medium
+====================================================================
+--- c15 (63 moves)
+c15   15.23-27.30.41.goal
+Verified
+
+--- c16 (40 moves)
+c16   16.19.20.goal
+Verified
+
+--- c18 (33 moves)
+c18   18.21.goal
+Verified
+
+--- c19 (59 moves)
+c19   16.19.20.goal
+Verified
+
+--- c20 (45 moves)
+c20.21   16.19.20.goal
+Verified
+
+--- c21 (26 moves)
+c20.21   18.21.goal
+Verified
+
+--- c23 (28 moves)
+c23   15.23-27.30.41.goal
+Verified
+
+--- c24 (32 moves)
+c24   15.23-27.30.41.goal
+Verified
+
+--- c27a (60 moves)
+c27a   15.23-27.30.41.goal
+Verified
+
+--- c27b (70 moves)
+c27b   15.23-27.30.41.goal
+Verified
+
+--- c27c (78 moves)
+c27c   15.23-27.30.41.goal
+Verified
+
+--- c27d (81 moves)
+c27d   15.23-27.30.41.goal
+Verified
+
+--- c28 (61 moves)
+c28   28.goal
+Verified
+
+--- c29 (54 moves)
+c29   29.goal
+Verified
+
+--- c30 (67 moves)
+c15   15.23-27.30.41.goal
+Verified
+
+--- c31 (55 moves)
+c31   31.goal
+Verified
+
+--- c32 (25 moves)
+c32   32.goal
+Verified
+
+--- c33 (20 moves)
+c33   33.goal
+Verified
+
+--- c34 (39 moves)
+c34   34.goal
+Verified
+
+--- c35 (101 moves)
+c35   35.goal
+Verified
+
+--- c36 (28 moves)
+c36   36.goal
+Verified
+
+--- c37 (40 moves)
+c37   37.goal
+Verified
+
+--- c38 (21 moves)
+c38   38.goal
+Verified
+
+--- c39 (53 moves)
+c39   39.goal
+Verified
+
+--- c40 (21 moves)
+c40   40.goal
+Verified
+
+--- c41 (98 moves)
+c15   15.23-27.30.41.goal
+Verified
+
+--- c43 (55 moves)
+c43-45   43.goal
+Verified
+
+--- c44 (70 moves)
+c43-45   44.goal
+Verified
+
+--- c50 (41 moves, 4x6)
+c50-51   50.52.goal
+Verified
+
+--- c51 (71 moves, 4x6)
+c50-51   51.goal
+Verified
+
+--- c52 (90 moves, 4x6)
+c52   50.52.goal
+Verified
+
+--- c56 (55 moves, 6x5)
+c56   55.56.goal
+Verified
+
+=== dads (min 58 moves)
+--- regular dads
+dads   dads.goal
+Verified
+
+--- dads rotated 90 degrees
+dads+90   dads+90.goal
+Verified
+
+--- dads rotated 180 degrees
+dads+180   dads+180.goal
+Verified
+
+--- dads rotated 270 degrees
+dads+270   dads+270.goal
+Verified
+
+=== donkey (min 83 moves)
+--- regular donkey
+init.from.handout   goal.1.from.handout
+Exception in thread "main" java.io.FileNotFoundException: /home/ff/cs47b/lib/puzzles/medium/goal.1.from.handout (No such file or directory)
+        at java.io.FileInputStream.open0(Native Method)
+        at java.io.FileInputStream.open(FileInputStream.java:195)
+        at java.io.FileInputStream.<init>(FileInputStream.java:138)
+        at java.util.Scanner.<init>(Scanner.java:611)
+        at Blocks.Solver.readFile(Solver.java:48)
+        at Blocks.Solver.main(Solver.java:36)
+*** incorrect status
+Error in /home/ff/cs47b/lib/puzzles/medium/init.from.handout or /home/ff/cs47b/lib/puzzles/medium/goal.1.from.handout
+*** incorrect solver output
+
+--- donkey rotated 90 degrees
+handout.config.1+90   handout.goal+90
+Verified
+
+--- donkey rotated 180 degrees
+handout.config.1+180   handout.goal+180
+Exception in thread "main" java.io.FileNotFoundException: /home/ff/cs47b/lib/puzzles/medium/handout.goal+180 (No such file or directory)
+        at java.io.FileInputStream.open0(Native Method)
+        at java.io.FileInputStream.open(FileInputStream.java:195)
+        at java.io.FileInputStream.<init>(FileInputStream.java:138)
+        at java.util.Scanner.<init>(Scanner.java:611)
+        at Blocks.Solver.readFile(Solver.java:48)
+        at Blocks.Solver.main(Solver.java:36)
+*** incorrect status
+Error in /home/ff/cs47b/lib/puzzles/medium/handout.config.1+180 or /home/ff/cs47b/lib/puzzles/medium/handout.goal+180
+*** incorrect solver output
+
+--- donkey rotated 27 degrees
+handout.config.1+270   handout.goal+270
+Verified
+
+=== other
+--- big tray
+big.tray.4   big.tray.4.goal
+Verified
+
+--- blockado (needs 74 moves)
+blockado   blockado.goal
+Verified
+
+hive5 [187] ~/src #

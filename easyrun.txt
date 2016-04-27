@@ -1,0 +1,176 @@
+hive5 [189] ~/src # ./run.easy
+These should all say Verified
+*** Start with some solvable puzzles.
+
+trying init.from.handout
+Verified
+
+trying 1x1
+Verified
+
+trying 1x2, one block
+Verified
+
+trying 1x2, two blocks
+Verified
+
+trying easy
+Verified
+
+trying full.1
+Verified
+
+trying big.block.1
+Verified
+
+trying big.block.2
+Verified
+
+trying big.block.3
+Verified
+
+trying big.block.4
+Verified
+
+trying big.tray.2
+Verified
+
+trying big.search.1
+Verified
+
+trying big.search.2
+Verified
+
+trying check.diff.blocks
+Verified
+
+trying enormous.full.1
+Verified
+
+trying enormous.full.1
+Verified
+
+trying forced.match.1
+Verified
+
+trying forced.match.1+90
+Verified
+
+trying forced.match.2
+Verified
+
+trying immed.match.0
+Verified
+
+trying immed.match.1
+Verified
+
+trying immed.match.2
+Verified
+
+trying immed.match.2+90
+Verified
+
+trying immed.match.2+180
+Verified
+
+trying immed.match.2+270
+Verified
+
+trying instant.match.0
+Verified
+
+trying instant.match.1
+Verified
+
+trying instant.match.1+90
+Verified
+
+trying instant.match.2
+Verified
+
+trying instant.match.3
+Verified
+
+trying instant.match.3+90
+Verified
+
+trying no.move.1
+Verified
+
+trying no.move.2
+Verified
+
+trying no.move.3
+Verified
+
+trying 140x140
+Verified
+
+trying small.search
+Verified
+
+trying small.search+90
+Verified
+
+trying tree+90
+Verified
+
+trying tree+180
+Verified
+
+trying tree+270
+Verified
+
+trying tree
+Verified
+
+*** Now try some unsolvable puzzles.
+
+trying enormous.3
+Verified
+
+trying enormous.full.1
+Verified
+
+trying full.2
+Verified
+
+trying impossible.1
+Verified
+
+trying impossible.1+90
+Verified
+
+trying impossible.3
+Verified
+
+trying impossible.3x4
+Verified
+
+trying impossible.4
+Verified
+
+trying impossible.4+90
+Verified
+
+trying impossible.4+180
+Verified
+
+trying impossible.4+270
+Verified
+
+trying impossible.4x3
+Verified
+
+trying no.move.1
+Verified
+
+trying no.move.2
+Verified
+
+trying no.move.3
+Verified
+
+trying one.move.1
+Verified
