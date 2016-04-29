@@ -14,9 +14,12 @@ public class Game {
     public Game(List<String> inputList, List<String> goalList) {
         this.goal = new HashSet<>();
         this.prevStates = new HashSet<>();
-        this.statesToTry = new LinkedList<>();
-        this.statesToTry.add(new Board(inputList));
-
+        this.statesToTry = new PriorityQueue<>(11, new Comparator<Board>() {
+            @Override
+            public int compare(Board o1, Board o2) {
+                return o1.compareTo(o2);
+            }
+        });
 
         // Parses List of Strings into 2D Array
         for(String i : goalList) {
@@ -27,6 +30,8 @@ public class Game {
             }
             goal.add(new Block(block));
         }
+
+        this.statesToTry.add(new Board(inputList, goal));
 
         if (Solver.isDebug()) {
             //System.out.println("Board: \n" + this.board.toString());
@@ -48,13 +53,23 @@ public class Game {
         }
 
         while(!statesToTry.isEmpty()) {
+            // pops from the head of the queue
             Board tray = statesToTry.remove();
-            if(!prevStates.contains(tray)) {
-                prevStates.add(tray);
-                statesToTry.addAll(tray.newMoves());
-                if (hasGoal(tray)) {
-                    return tray;
+//            if(Solver.isDebug()) {
+//                // System.out.println("Making a move");
+//                // System.out.println(tray.toString());
+//            }
+            prevStates.add(tray);
+            for(Board move : tray.newMoves()) {
+                if(!prevStates.contains(move) && !statesToTry.contains(move)) {
+                    statesToTry.add(move);
                 }
+            }
+            if (hasGoal(tray)) {
+                if(Solver.isDebug()) {
+                    System.out.println("Number of states tried: " + prevStates.size());
+                }
+                return tray;
             }
         }
         System.exit(1);

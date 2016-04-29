@@ -56,11 +56,20 @@ public class BlockTest {
     }
 
     @Test
+    public void deepCopy() throws Exception {
+        Block b1 = new Block(new int[]{1, 2, 3, 4});
+        Block b2 = b1.deepCopy();
+        assertEquals(b1, b2);
+        assertNotSame(b1, b2);
+    }
+
+    @Test
     public void equals() throws Exception {
         Block b1 = new Block(new int[]{1, 2, 3, 4});
         Block b2 = new Block(1, 2, 3, 4);
         Block b3 = new Block(1, 2, 4, 4);
-        assertTrue(b1.equals(b2));
+        assertNotSame(b1,b2);
+        assertEquals(b1,b2);
         assertTrue(b2.equals(b1));
         assertTrue(b1.equals(b1));
         assertFalse(b3.equals(b2));
@@ -79,7 +88,23 @@ public class BlockTest {
     @Test
     public void toStringTest() throws Exception {
         Block b = new Block(1, 2, 3, 4);
-        assertEquals(b.toString(), "[1, 2, 3, 4]");
+        assertEquals(b.toString(), "1 2 3 4");
+    }
+
+    @Test
+    public void distanceTo() throws Exception {
+        Block b1 = new Block(1, 2, 3, 4);
+        Block b2 = new Block(1, 2, 5, 2);
+        assertEquals(b1.distanceTo(b2), 4);
+    }
+
+    @Test
+    public void sameType() throws Exception {
+        Block b1 = new Block(1, 2, 3, 4);
+        Block b2 = new Block(1, 2, 5, 2);
+        Block b3 = new Block(2, 1, 5, 2);
+        assertTrue(b1.sameType(b2));
+        assertFalse(b2.sameType(b3));
     }
 
 }

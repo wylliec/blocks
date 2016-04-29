@@ -81,4 +81,12 @@ public class Block {
     public String toString(){
         return getH() + " " + getW() + " " + getY() + " " + getX();
     }
+
+    public int distanceTo(Block other) {
+        return Math.abs(this.getX() - other.getX()) + Math.abs(this.getY() - other.getY());
+    }
+
+    public boolean sameType(Block other) {
+        return this.getH() == other.getH() && this.getW() == other.getW();
+    }
 }

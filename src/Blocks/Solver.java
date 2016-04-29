@@ -27,6 +27,8 @@ public class Solver {
             }
             if(option.contains("options")) {
                 System.out.println("Usage: java Solver [-o[options|debug]] init-file goal-file");
+                System.out.println("options: display the command line options for this program");
+                System.out.println("debug: display debug information as the program runs");
             }
             pos++;
         }
@@ -57,8 +59,15 @@ public class Solver {
     public static void printMoves(Board win) {
         Deque<String> moves = new ArrayDeque<>();
         while(win.getPrev() != null) {
-            moves.push(win.getMove());
+            String move = win.getMove();
+            if(Solver.isDebug()) {
+                move += "\n" + win.toString();
+            }
+            moves.push(move);
             win = win.getPrev();
+        }
+        if(Solver.isDebug()) {
+            System.out.println("Number moves: " + moves.size());
         }
         while(!moves.isEmpty()) {
             System.out.println(moves.pop());

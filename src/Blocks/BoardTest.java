@@ -1,11 +1,11 @@
 package Blocks;
 
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -19,13 +19,22 @@ public class BoardTest {
         list.add("10 10");
         list.add("4 4 2 2");
         list.add("4 3 6 2");
-        Board tray = new Board(list);
-        //System.out.println(tray.toVisualString());
-        for (int i = 0; i < 30; i++) {
-            //tray.move();
-            //System.out.println(tray.toVisualString());
-        }
+        Board tray = new Board(list, null);
+        //System.out.println(tray.newMoves());
+        assertEquals(tray.newMoves().size(), 5);
     }
+
+//    @Test
+//    public void deepCopy() throws Exception {
+//        List<String> list = new ArrayList<>();
+//        list.add("10 10");
+//        list.add("4 4 2 2");
+//        list.add("4 3 6 2");
+//        Board b1 = new Board(list, null);
+////        Board b2 = b1.deepCopy("");
+////        assertEquals(b1, b2);
+////        assertNotSame(b1, b2);
+//    }
 
     @org.junit.Test
     public void isOK() throws Exception {
@@ -33,10 +42,10 @@ public class BoardTest {
         list.add("10 10");
         list.add("4 4 2 2");
         list.add("4 3 6 2");
-        Board tray = new Board(list);
+        Board tray = new Board(list, null);
         assertTrue(tray.isOK());
         list.add("4 3 2 2");
-        tray = new Board(list);
+        tray = new Board(list, null);
         assertFalse(tray.isOK());
     }
 
@@ -46,7 +55,7 @@ public class BoardTest {
         list.add("10 10");
         list.add("4 4 2 2");
         list.add("4 3 6 2");
-        Board tray = new Board(list);
+        Board tray = new Board(list, null);
         assertTrue(tray.isOK(new Block(2, 2, 0, 2)));
         assertFalse(tray.isOK(new Block(2, 2, 1, 2)));
     }
@@ -56,7 +65,7 @@ public class BoardTest {
         List<String> list = new ArrayList<>();
         list.add("10 10");
         list.add("4 4 2 2");
-        Board tray = new Board(list);
+        Board tray = new Board(list, null);
         assertTrue(tray.hasBlock(new Block(4, 4, 2, 2)));
         assertFalse(tray.hasBlock(new Block(4, 3, 2, 1)));
     }
@@ -117,44 +126,45 @@ public class BoardTest {
     public void hashCodeTest() throws Exception {
         List<String> list = new ArrayList<>();
         list.add("256 256");
-        list.add("1 1 1 1");
-        list.add("255 255 255 255");
-        list.add("0 0 256 256");
-        Board tray = new Board(list);
-        assertEquals(16843008, tray.hashCode());
+        list.add("256 256 0 0");
+        Board tray = new Board(list, null);
+        for (int i = 0; i < 10000; i++) {
+            tray.hashCode();
+        }
+        //assertEquals(16843008, tray.hashCode());
     }
 
-    @org.junit.Test
-    public void hashCodeSet() throws Exception {
-        List<String> list = new ArrayList<>();
-        list.add("256 256");
-        list.add("1 1 1 1");
-        list.add("255 255 255 255");
-        list.add("0 0 256 256");
-        Board tray = new Board(list);
-        Set<Integer> s = tray.hashCodeSet();
-        //System.out.println(s);
-        assertTrue(s.contains(-1));
-        assertTrue(s.contains(16843009));
-        assertTrue(s.contains(0));
-        assertFalse(s.contains(1));
-    }
+//    @org.junit.Test
+//    public void hashCodeSet() throws Exception {
+//        List<String> list = new ArrayList<>();
+//        list.add("256 256");
+//        list.add("1 1 1 1");
+//        list.add("255 255 255 255");
+//        list.add("0 0 256 256");
+//        Board tray = new Board(list);
+//        Set<Integer> s = tray.hashCodeSet();
+//        //System.out.println(s);
+//        assertTrue(s.contains(-1));
+//        assertTrue(s.contains(16843009));
+//        assertTrue(s.contains(0));
+//        assertFalse(s.contains(1));
+//    }
 
-    @org.junit.Test
-    public void hashCodeSetCollisions() throws Exception {
-        List<String> list = new ArrayList<>();
-        list.add("256 256");
-        list.add("1 1 1 1");
-        list.add("255 255 255 255");
-        list.add("0 0 256 256");
-        Board tray = new Board(list);
-        Set<Integer> s = tray.hashCodeSet();
-        //System.out.println(s);
-        assertTrue(s.contains(-1));
-        assertTrue(s.contains(16843009));
-        assertTrue(s.contains(0));
-        assertFalse(s.contains(1));
-    }
+//    @org.junit.Test
+//    public void hashCodeSetCollisions() throws Exception {
+//        List<String> list = new ArrayList<>();
+//        list.add("256 256");
+//        list.add("1 1 1 1");
+//        list.add("255 255 255 255");
+//        list.add("0 0 256 256");
+//        Board tray = new Board(list);
+//        Set<Integer> s = tray.hashCodeSet();
+//        //System.out.println(s);
+//        assertTrue(s.contains(-1));
+//        assertTrue(s.contains(16843009));
+//        assertTrue(s.contains(0));
+//        assertFalse(s.contains(1));
+//    }
 
     @org.junit.Test
     public void toStringTest() throws Exception {
@@ -162,21 +172,50 @@ public class BoardTest {
         list.add("10 10");
         list.add("4 4 2 2");
         list.add("4 3 6 2");
-        Board tray = new Board(list);
+        Board tray = new Board(list, null);
         // nondeterministic set
         assertEquals(tray.toString(),
-                "[[4, 3, 6, 2]\n" +
-                " [4, 4, 2, 2]]");
+                " 0  0  0  0  0  0  0  0  0  0 \n" +
+                " 0  0  0  0  0  0  0  0  0  0 \n" +
+                " 0  0 44 44 44 44  0  0  0  0 \n" +
+                " 0  0 44 44 44 44  0  0  0  0 \n" +
+                " 0  0 44 44 44 44  0  0  0  0 \n" +
+                " 0  0 44 44 44 44  0  0  0  0 \n" +
+                " 0  0 43 43 43  0  0  0  0  0 \n" +
+                " 0  0 43 43 43  0  0  0  0  0 \n" +
+                " 0  0 43 43 43  0  0  0  0  0 \n" +
+                " 0  0 43 43 43  0  0  0  0  0 \n");
     }
 
-    @org.junit.Test
-    public void toVisualString() throws Exception {
-        List<String> list = new ArrayList<>();
-        list.add("10 10");
-        list.add("4 3 6 1");
-        list.add("4 4 2 2");
-        Board tray = new Board(list);
-        System.out.println(tray.toVisualString().hashCode());
+//    @org.junit.Test
+//    public void toVisualString() throws Exception {
+//        List<String> list = new ArrayList<>();
+//        list.add("10 10");
+//        list.add("4 3 6 1");
+//        list.add("4 4 2 2");
+//        Board tray = new Board(list, null);
+//        System.out.println(tray.toString().hashCode());
+//    }
+
+
+//    @Test
+//    public void getMove() throws Exception {
+//
+//    }
+//
+//    @Test
+//    public void getPrev() throws Exception {
+//
+//    }
+
+    @Test
+    public void heuristic() throws Exception {
+
+    }
+
+    @Test
+    public void compareTo() throws Exception {
+
     }
 
 }

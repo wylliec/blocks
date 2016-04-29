@@ -5,7 +5,7 @@ import java.util.*;
 /**
  * Created by Caleb on 2/19/2016.
  */
-public class Board {
+public class Board{
 
     public enum Direction {
         DOWN (1, 0),
@@ -24,20 +24,23 @@ public class Board {
     }
 
 
+    private static int h, w;
+    private static Set<Block> goal;
     private Set<Block> state;
-    private int h, w;
-
     private Board prevState;
     private String move;
+    private int numMoves;
+    //private int heuristic;
 
-    public Board (List<String> input) {
+    public Board (List<String> input, Set<Block> goal) {
         String[] dims = input.get(0).split(" ");
         this.h = Integer.parseInt(dims[0]);
         this.w = Integer.parseInt(dims[1]);
         this.state = new HashSet<>();
         this.prevState = null;
         this.move = null;
-
+        this.numMoves = 0;
+        this.goal = goal;
         // Parses List of Strings into 2D Array
         for(int i = 0; i < input.size() - 1; i++) {
             String[] inputBlocks = input.get(i + 1).split(" ");
@@ -47,17 +50,21 @@ public class Board {
             }
             state.add(new Block(block));
         }
+        //this.heuristic = heuristic(goal);
     }
 
-    private Board(int h, int w, Set<Block> currState, Board prevState, String move) {
-        this.h = h;
-        this.w = w;
+    private Board(Set<Block> currState, Board prevState, String move, int moves) {
+//        this.h = h;
+//        this.w = w;
         this.state = new HashSet<>();
         this.prevState = prevState;
         this.move = move;
+        this.numMoves = moves;
+//        this.goal = goal;
         for(Block b : currState) {
-            this.state.add((b.deepCopy()));
+            this.state.add(b.deepCopy());
         }
+        //this.heuristic = heuristic(goal);
 
     }
 
@@ -69,7 +76,7 @@ public class Board {
                 String blockPos = b.getY() + " " + b.getX();
                 b.move(d);
                 if(isOK(b)) {
-                    newBoards.add(this.deepCopy(blockPos + " " + b.getY() + " " + b.getX()));
+                    newBoards.add(this.newBoard(blockPos + " " + b.getY() + " " + b.getX()));
                 }
                 b.unmove(d);
             }
@@ -77,8 +84,10 @@ public class Board {
         return newBoards;
     }
 
-    private Board deepCopy(String newMove) {
-        return new Board(h, w, state, this, newMove);
+    // should this be private?
+    // deep copy
+    private Board newBoard(String newMove) {
+        return new Board(state, this, newMove, numMoves+1);
     }
 
     // Checks whether a board state would be valid
@@ -125,6 +134,35 @@ public class Board {
         return prevState;
     }
 
+    public int getNumMoves() {
+        return numMoves;
+    }
+
+    public int heuristic() {
+        // for every block in goal, find closest manhattan distance to a block in this board
+        int totalDistance = 0;
+        for(Block g : goal) {
+            int minDistance = Integer.MAX_VALUE;
+            for(Block b : state) {
+                if(g.sameType(b)){
+                    int distance = g.distanceTo(b);
+                    if(distance < minDistance) {
+                        minDistance = distance;
+                    }
+                }
+            }
+            totalDistance += minDistance;
+        }
+        return totalDistance;
+    }
+
+    public int compareTo(Board other) {
+        if(Solver.isDebug()) {
+            System.out.println("Comparing");
+        }
+        return (this.heuristic() + this.numMoves) - (other.heuristic() + other.numMoves);
+    }
+
     public boolean equals(Object o) {
         if(this == o) {
             return true;
@@ -138,27 +176,27 @@ public class Board {
 
     public int hashCode() {
         return state.hashCode();
+        //return toString().hashCode();
     }
 
+//    public String toString() {
+//        return state.toString().replace(",", "\n");
+//    }
+
+    // very expensive
     public String toString() {
-        return state.toString().replace("],", "]\n");
-    }
-
-    public String toVisualString() {
         int[][] tray = new int[h][w];
-        int id = 1;
         for(Block b : state) {
             for(int i = 0; i < b.getH(); i++) {
                 for(int j = 0; j < b.getW(); j++) {
-                    tray[b.getY() + i][b.getX() + j] = id * 100 + b.getH() * 10 + b.getW();
+                    tray[b.getY() + i][b.getX() + j] = b.getH() * 10 /*or 1000*/ + b.getW();
                 }
             }
-            id++;
         }
         String toReturn = "";
         for(int i = 0; i < tray.length; i ++) {
             for (int j = 0; j < tray[0].length; j++) {
-                toReturn += String.format("%3d ", tray[i][j] % 100);
+                toReturn += String.format("%2d ", tray[i][j]);
                 //toReturn += (char)((tray[i][j] % 100) + 'A' - 1) + " ";
             }
             toReturn = toReturn.replace('@', '.') + "\n";
